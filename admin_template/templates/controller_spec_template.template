@@ -1,0 +1,120 @@
+require 'rails_helper'
+
+RSpec.describe <%= @underscored_controller_str.camelize %>Controller, type: :controller do
+  let!(:user) { FactoryBot.create(:user, :admin) }
+  let!(:<%= @underscored_model_str %>_1) { FactoryBot.create(:<%= @underscored_model_str %>) }
+  let!(:<%= @underscored_model_str %>_2) { FactoryBot.create(:<%= @underscored_model_str %>) }
+  let!(:<%= @underscored_model_str %>_params) { FactoryBot.attributes_for(:<%= @underscored_model_str %>) }
+
+  describe 'GET #list' do
+    def do_request(user, params = {})
+      sign_in user if user
+      get :list, params: params
+    end
+
+    context 'access to list discounts page' do
+      before do
+        do_request(user)
+      end
+
+      it { expect(response).to render_template :list }
+      it { expect(assigns(:<%= @underscored_model_str.pluralize %>)).to include(<%= @underscored_model_str %>_1) }
+      it { expect(assigns(:<%= @underscored_model_str.pluralize %>)).to include(<%= @underscored_model_str %>_2) }
+    end
+  end
+
+  describe 'GET #admin_show' do
+    def do_request(user, params = {})
+      sign_in user if user
+      get :admin_show, params: params
+    end
+
+    context 'access to admin edit <%= @underscored_model_str.humanize.downcase %> page' do
+      before do
+        do_request(user, { id: <%= @underscored_model_str %>_1.id })
+      end
+
+      it { expect(response).to render_template :admin_show }
+      it { expect(assigns(:<%= @underscored_model_str %>)).to eq <%= @underscored_model_str %>_1 }
+    end
+  end
+
+  describe 'GET #admin_new' do
+    def do_request(user, params = {})
+      sign_in user if user
+      get :admin_new, params: params
+    end
+
+    context 'access to admin new <%= @underscored_model_str.humanize.downcase %> page' do
+      before do
+        do_request(user)
+      end
+
+      it { expect(response).to render_template :admin_new }
+    end
+  end
+
+  describe 'GET #admin_edit' do
+    def do_request(user, params = {})
+      sign_in user if user
+      get :admin_edit, params: params
+    end
+
+    context 'access to admin edit <%= @underscored_model_str.humanize.downcase %> page' do
+      before do
+        do_request(user, { id: <%= @underscored_model_str %>_1.id })
+      end
+
+      it { expect(response).to render_template :admin_edit }
+      it { expect(assigns(:<%= @underscored_model_str %>)).to eq <%= @underscored_model_str %>_1 }
+    end
+  end
+
+  describe 'POST #admin_create' do
+    def do_request(user, params = {})
+      sign_in user if user
+      post :admin_create, params: params
+    end
+
+    context 'create a new <%= @underscored_model_str.humanize.downcase %>' do
+      before do
+        do_request(user, { <%= @underscored_model_str %>: <%= @underscored_model_str %>_params })
+      end
+
+      it { expect(response).to redirect_to list_<%= @underscored_controller_path_str.pluralize %>_path }
+      it { expect(flash[:notice]).to eq '<%= @underscored_model_str.humanize %> created successfully' }
+    end
+  end
+
+  describe 'PUT #admin_update' do
+    def do_request(user, params = {})
+      sign_in user if user
+      put :admin_update, params: params
+    end
+
+    context 'update a specific <%= @underscored_model_str.humanize.downcase %>' do
+      before do
+        do_request(user, { id: <%= @underscored_model_str %>_1.id, <%= @underscored_model_str %>: <%= @underscored_model_str %>_params })
+      end
+
+      it { expect(response).to redirect_to list_<%= @underscored_controller_path_str.pluralize %>_path }
+      it { expect(flash[:notice]).to eq '<%= @underscored_model_str.humanize %> updated successfully' }
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    def do_request(user, params = {})
+      sign_in user if user
+      delete :destroy, params: params
+    end
+
+    context 'destroy a specific <%= @underscored_model_str.humanize.downcase %>' do
+      before do
+        do_request(user, { id: <%= @underscored_model_str %>_1.id })
+      end
+
+      it { expect(response).to redirect_to list_<%= @underscored_controller_path_str.pluralize %>_path }
+      it { expect(flash[:notice]).to eq '<%= @underscored_model_str.humanize %> destroyed successfully' }
+    end
+  end
+end

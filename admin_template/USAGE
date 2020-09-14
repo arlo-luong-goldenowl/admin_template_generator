@@ -1,0 +1,15 @@
+Description:
+    This generator will generate CRUD of one resource on admin side
+
+Example:
+    rails generate admin_template LuxuryProductsController --model=LuxuryProduct
+
+    This will create:
+        app/controllers/luxury_products_controller.rb
+        app/policies/luxury_product_policy.rb
+        app/views/luxury_products/list.slim
+        app/views/luxury_products/admin_new.slim
+        app/views/luxury_products/admin_edit.slim
+        app/views/luxury_products/admin_show.slim
+        app/views/luxury_products/_admin_form.slim
+        spec/controllers/luxury_products_controller_spec.rb

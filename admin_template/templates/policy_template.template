@@ -1,0 +1,29 @@
+class <%= @camelized_model_str %>Policy < ApplicationPolicy
+  def list?
+    user&.group_users_full?
+  end
+
+  def admin_show?
+    user&.group_users_full?
+  end
+
+  def admin_new?
+    user&.group_users_full?
+  end
+
+  def admin_create?
+    user&.group_users_full?
+  end
+
+  def admin_edit?
+    user&.group_users_full?
+  end
+
+  def admin_update?
+    user&.group_users_full?
+  end
+
+  def destroy?
+    user&.group_users_full?
+  end
+end

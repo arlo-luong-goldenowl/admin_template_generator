@@ -1,0 +1,8 @@
+.content
+  .col-md-12
+    .card
+      .card-header
+        h4.card-title
+          | <%= @underscored_model_str.humanize %> detail
+      .card-body
+        = render 'admin_form', url: <%= @list_path %>, submitable: false

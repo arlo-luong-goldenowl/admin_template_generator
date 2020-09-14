@@ -1,0 +1,8 @@
+.content
+  .col-md-12
+    .card
+      .card-header
+        h4.card-title
+          | Create <%= @underscored_model_str.humanize.downcase %>
+      .card-body
+        = render 'admin_form', url: <%= @admin_create_path %>, submitable: true

@@ -1,0 +1,32 @@
+.content
+  .col-md-8.ml-auto.mr-auto
+    h1.text-center
+      | <%= @underscored_model_str.humanize.pluralize %>
+  .row.mt-2
+    .col-md-12
+      .card
+        .card-body
+          table.datatable.table.table-striped
+            thead
+              tr
+                <% @table_header_attributes.each_with_index do |attribute, index| %><%= index == 0 ? "th #{attribute}\n" : "#{' '*15}th #{attribute}#{index == @table_header_attributes.length - 1 ? "" : "\n"}" %> <% end %>
+                th.sorting_desc_disabled.sorting_asc_disabled.text-right
+                  | Actions
+            tbody
+              - @<%= @underscored_model_str.pluralize %>.each do |<%= @underscored_model_str %>|
+                tr
+                  <% @table_body_attributes.each_with_index do |attribute, index| %><%= index == 0 ? "td = #{@underscored_model_str}.#{attribute}\n" : "#{' '*17}td = #{@underscored_model_str}.#{attribute}#{index == @table_body_attributes.length - 1 ? "" : "\n"}" %> <% end %>
+                  td.text-right
+                    = link_to <%= @admin_show_path %>(<%= @underscored_model_str %>), class: 'btn btn-link btn-success btn-icon btn-sm', data: { title: 'View Item', placement: 'top', toggle: 'tooltip' } do
+                      i.dc-icons.icon-book
+                    | &nbsp;
+                    = link_to <%= @admin_edit_path %>(<%= @underscored_model_str %>), class: 'btn btn-link btn-info btn-icon btn-sm edit', data: { title: 'Edit Item', placement: 'top', toggle: 'tooltip' } do
+                      i.dc-icons.icon-pen-01
+                    | &nbsp;
+                    = link_to <%= @underscored_model_str %>, method: :delete, data: { confirm: 'Are you sure?',  title: 'Delete Item', placement: 'top', toggle: 'tooltip' }, class: 'btn btn-link btn-danger btn-icon btn-sm remove' do
+                      i.dc-icons.icon-e-remove
+  .row.mt-2
+    .col-md-12
+      .card
+        .card-body
+          = link_to "New <%= @underscored_model_str.humanize.downcase %>", <%= @admin_new_path %>

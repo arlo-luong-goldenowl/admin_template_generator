@@ -1,0 +1,65 @@
+class <%= @underscored_controller_str.camelize %>Controller < ApplicationController
+  before_action :authenticate_user!
+  before_action :prepare_<%= @underscored_model_str %>, only: %w[admin_edit admin_show admin_update destroy]
+  after_action :verify_authorized
+  layout 'admin'
+
+  def list
+    authorize <%= @camelized_model_str %>
+    @<%= @underscored_model_str.pluralize %> = <%= @camelized_model_str %>.all
+  end
+
+  def admin_show
+    authorize @<%= @underscored_model_str %>
+  end
+
+  def admin_new
+    @<%= @underscored_model_str %> = <%= @camelized_model_str %>.new
+    authorize <%= @camelized_model_str %>
+  end
+
+  def admin_create
+    @<%= @underscored_model_str %> = <%= @camelized_model_str %>.new(<%= @underscored_model_str %>_params)
+    authorize @<%= @underscored_model_str %>
+
+    if @<%= @underscored_model_str %>.save
+      redirect_to list_<%= @underscored_controller_path_str.pluralize %>_path, notice: '<%= @underscored_model_str.humanize %> created successfully'
+    else
+      render :admin_new
+    end
+  end
+
+  def admin_edit
+    authorize @<%= @underscored_model_str %>
+  end
+
+  def admin_update
+    authorize @<%= @underscored_model_str %>
+
+    if @<%= @underscored_model_str %>.update(<%= @underscored_model_str %>_params)
+      redirect_to list_<%= @underscored_controller_path_str.pluralize %>_path, notice: '<%= @underscored_model_str.humanize %> updated successfully'
+    else
+      render :admin_edit
+    end
+  end
+
+  def destroy
+    authorize @<%= @underscored_model_str %>
+
+    if @<%= @underscored_model_str %>.destroy
+      redirect_to list_<%= @underscored_controller_path_str.pluralize %>_path, notice: '<%= @underscored_model_str.humanize %> destroyed successfully'
+    else
+      redirect_to list_<%= @underscored_controller_path_str.pluralize %>_path, alert: 'Failure to destroy <%= @underscored_model_str.humanize.downcase %>'
+    end
+  end
+
+  private
+
+  def prepare_<%= @underscored_model_str %>
+    @<%= @underscored_model_str %> = <%= @camelized_model_str %>.find(params[:id])
+  end
+
+  def <%= @underscored_model_str %>_params
+    params.require(:<%= @underscored_model_str %>).permit(<%= @attributes %>)
+  end
+end
