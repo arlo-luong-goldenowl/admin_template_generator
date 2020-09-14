@@ -1,4 +1,7 @@
 = simple_nested_form_for(@<%= @underscored_model_str %>, url: url) do |f|
   <% @attributes_with_type.each do |attribute, type| %><%= @generate_input.call(attribute, type) %>
   <% end %>
-  = f.button :button, class: 'btn btn-fill btn-primary'
+  - unless submitable
+    = link_to 'Back to List', url, class: 'btn btn-info'
+  - else
+    = f.button :button, class: 'btn btn-fill btn-primary'
